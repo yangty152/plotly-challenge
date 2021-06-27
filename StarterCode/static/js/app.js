@@ -25,7 +25,8 @@ function optionChanged(id){
   var metadata_obj = sample_metadata[0]; //maybe make this more dynamic
   var metadata_arr = d3.entries(metadata_obj);
   console.log(metadata_arr);
-  d3.select("#sample-metadata").selectAll("div")
+  d3.select("#sample-metadata").selectAll("p").remove();
+  d3.select("#sample-metadata").selectAll("p")
         .data(metadata_arr)
         .enter()
         .append("p")
