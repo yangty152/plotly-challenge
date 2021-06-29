@@ -4,6 +4,8 @@ d3.json("data/samples.json").then((data) => {
   names = data.names;
   metadata = data.metadata;
   samples = data.samples;
+  //Add an instruction menu option
+  names.unshift("Select an ID");
   //Populate the drop down menu with ids
   d3.select("#selDataset").selectAll("option")
       .data(names)
@@ -58,7 +60,7 @@ function optionChanged(id){
     top_10_sample_labels = top_10_sample_labels.reverse();
     var otu_ids_label = top_10_otu_ids.map(el => 'OTU ' + el );
     
-    //Draw the bar chart - work on remove x value from hover over
+    //Draw the bar chart
     var trace1 = {
         x: top_10_sample_values,
         y: otu_ids_label,
@@ -72,7 +74,6 @@ function optionChanged(id){
       
       var layout = {
         title: "Top 10 Bacteria Cultures Found",
-       //y
       }; 
 
       var data1 = [trace1];
@@ -105,33 +106,42 @@ function optionChanged(id){
 
     Plotly.newPlot('bubble', data, layout);
 
-var data = [
-    {
-      domain: { x: [0, 1], y: [0, 1] },
-      value: 450,
-      title: { text: "Belly Button Washing Frequency" },
-      type: "indicator",
-      mode: "gauge+number+delta",
-      delta: { reference: 380 },
-      gauge: {
-        axis: { range: [null, 500] },
-        steps: [
-          { range: [0, 250], color: "lightgray" },
-          { range: [250, 400], color: "gray" }
-        ],
-        threshold: {
-          line: { color: "red", width: 4 },
-          thickness: 0.75,
-          value: 490
+    // Draw the gauge
+    var data = [
+        {
+          domain: { x: [0, 1], y: [0, 1] },
+          value: metadata_obj.wfreq,
+          title: { 
+                  text: "Belly Button Washing Frequency",
+                },
+          type: "indicator",
+          mode: "gauge",
+          delta: { reference: 380 },
+          gauge: {
+            axis: { range: [null, 9] },
+            steps: [
+              {range: [0,1], color: "Gainsboro"},
+              {range: [1,2], color: "LightGray"},
+              {range: [2,3], color: "Silver"},
+              {range: [3,4], color: "DarkGray"},
+              {range: [4,5], color: "Gray"},
+              {range: [5,6], color: "DimGray"},
+              {range: [6,7], color: "LightSlateGray"},
+              {range: [7,8], color: "SlateGray"},
+              {range: [8,9], color: "DarkSlateGray"},
+            ],
+            threshold: {
+              line: { color: "red", width: 4 },
+              thickness: 0.75,
+              value: metadata_obj.wfreq,
+            }
+          }
         }
-      }
-    }
-  ];
-  
-  var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
-  Plotly.newPlot('gauge', data, layout);
-
-   // samples = data.samples;
-
-//});
+      ];
+      
+      var layout = {width: 600, 
+                    height: 450, 
+                    margin: { t: 0, b: 0 }, 
+                    };
+      Plotly.newPlot('gauge', data, layout);
 };
